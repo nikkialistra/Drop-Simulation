@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,10 +13,21 @@ public class Inputs : MonoBehaviour
     [SerializeField] private TMP_InputField _inputRight;
     [Space]
     [SerializeField] private Button _start;
+    [SerializeField] private Button _stop;
     
     [Header("Parameters")]
     [SerializeField] private Simulation _simulation;
     private readonly TextValidator _textValidator = new TextValidator();
+
+    private void Start()
+    {
+        _simulation.SetHeight(int.Parse(_inputHeight.text));
+
+        _simulation.Up = float.Parse(_inputUp.text);
+        _simulation.Down = float.Parse(_inputDown.text);
+        _simulation.Left = float.Parse(_inputLeft.text);
+        _simulation.Right = float.Parse(_inputRight.text);
+    }
 
     private void OnEnable()
     {
@@ -27,6 +39,7 @@ public class Inputs : MonoBehaviour
         _inputRight.onValueChanged.AddListener(OnRightChange);
 
         _start.onClick.AddListener(OnStartClick);
+        _stop.onClick.AddListener(OnStopClick);
     }
 
     private void OnDisable()
@@ -39,6 +52,7 @@ public class Inputs : MonoBehaviour
         _inputRight.onValueChanged.RemoveListener(OnRightChange);
         
         _start.onClick.RemoveListener(OnStartClick);
+        _stop.onClick.RemoveListener(OnStopClick);
     }
 
     private void OnHeightChange(string text)
@@ -47,6 +61,7 @@ public class Inputs : MonoBehaviour
 
         if (input != "")
         {
+            _simulation.StopSimulation();
             UpdateHeight(input);
         }
         else
@@ -61,6 +76,7 @@ public class Inputs : MonoBehaviour
 
         if (input != "")
         {
+            _simulation.StopSimulation();
             UpdateUp(input);
         }
         else
@@ -75,6 +91,7 @@ public class Inputs : MonoBehaviour
         
         if (input != "")
         {
+            _simulation.StopSimulation();
             UpdateDown(input);
         }
         else
@@ -89,6 +106,7 @@ public class Inputs : MonoBehaviour
         
         if (input != "")
         {
+            _simulation.StopSimulation();
             UpdateLeft(input);
         }
         else
@@ -103,6 +121,7 @@ public class Inputs : MonoBehaviour
         
         if (input != "")
         {
+            _simulation.StopSimulation();
             UpdateRight(input);
         }
         else
@@ -116,12 +135,17 @@ public class Inputs : MonoBehaviour
         _simulation.StartSimulation();
     }
 
+    private void OnStopClick()
+    {
+        _simulation.StopSimulation();
+    }
+
     private void UpdateHeight(string input)
     {
         var value = int.Parse(input);
         value = Mathf.Clamp(value, 1, 18);
         _inputHeight.SetTextWithoutNotify(value.ToString());
-        _simulation.Height = value;
+        _simulation.SetHeight(value);
     }
 
     private void UpdateUp(string input)
