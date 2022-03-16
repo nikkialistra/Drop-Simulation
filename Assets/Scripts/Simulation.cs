@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -8,10 +9,13 @@ public class Simulation : MonoBehaviour
     [SerializeField] private Drop _drop;
     [Range(0.05f, 1f)]
     [SerializeField] private float _tickTime;
+    
+    [Space]
+    [SerializeField] private TMP_Text _jumpsCount;
 
     private int _height;
 
-    private Probabilities _probabilities = new Probabilities();
+    private readonly Probabilities _probabilities = new Probabilities();
     
     private Coroutine _simulateCoroutine;
 
@@ -76,6 +80,7 @@ public class Simulation : MonoBehaviour
 
     private void Reset()
     {
+        _jumpsCount.text = 0.ToString();
         _drop.SetHeight(_height);
         
         if (_simulateCoroutine != null)
@@ -115,6 +120,11 @@ public class Simulation : MonoBehaviour
         {
             _drop.Right();
         }
+
+        var count = int.Parse(_jumpsCount.text);
+        count++;
+
+        _jumpsCount.text = count.ToString();
     }
     
     private class Probabilities

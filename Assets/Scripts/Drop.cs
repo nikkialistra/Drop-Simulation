@@ -10,6 +10,7 @@ public class Drop : MonoBehaviour
     public void SetHeight(float value)
     {
         transform.position = new Vector3(0, value, 0);
+        transform.rotation = Quaternion.identity;
     }
 
     public bool IsFalling()
@@ -43,7 +44,7 @@ public class Drop : MonoBehaviour
 
     public void Right()
     {
-        var newPosition = new Vector3(transform.position.x + 1, transform.position.y + 1, 0);
+        var newPosition = new Vector3(transform.position.x + 1, transform.position.y, 0);
         var newRotation = Quaternion.Euler(new Vector3(0, 0, 30f));
         
         StartMovement(newPosition, newRotation, TickTime);
