@@ -7,6 +7,11 @@ public class Drop : MonoBehaviour
         transform.position = new Vector3(0, value, 0);
     }
 
+    public bool IsFalling()
+    {
+        return transform.position.y > 0;
+    }
+
     public void Up()
     {
         transform.position = new Vector3(transform.position.x, transform.position.y + 1, 0);

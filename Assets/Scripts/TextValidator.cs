@@ -18,6 +18,12 @@ public class TextValidator
 
     public bool TryMatchFloat(string input, out float result)
     {
+        if (Regex.IsMatch(input, @"^[0-9]*\.[0]+$"))
+        {
+            result = 0;
+            return false;
+        }
+        
         if (Regex.IsMatch(input, @"^[0-9]*\.[0-9]+$"))
         {
             result = float.Parse(input);
