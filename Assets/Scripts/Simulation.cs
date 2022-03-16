@@ -19,7 +19,6 @@ public class Simulation : MonoBehaviour
 
     public float TickTime
     {
-        get => _tickTime;
         set => _tickTime = value;
     }
 
@@ -87,11 +86,12 @@ public class Simulation : MonoBehaviour
 
     private IEnumerator Simulate()
     {
+        _drop.TickTime = _tickTime - (_tickTime / 15);
         while (_drop.IsFalling())
         {
-            yield return new WaitForSeconds(_tickTime);
-            
             Tick();
+            
+            yield return new WaitForSeconds(_tickTime);
         }
     }
 
