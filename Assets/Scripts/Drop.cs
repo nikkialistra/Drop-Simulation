@@ -23,7 +23,7 @@ public class Drop : MonoBehaviour
         var newPosition = new Vector3(transform.position.x, transform.position.y + 1, 0);
         var newRotation = Quaternion.identity;
 
-        StartMovement(newPosition, newRotation, TickTime);
+        StartMovement(newPosition, newRotation);
     }
 
     public void Down()
@@ -31,7 +31,7 @@ public class Drop : MonoBehaviour
         var newPosition = new Vector3(transform.position.x, transform.position.y - 1, 0);
         var newRotation = Quaternion.identity;
         
-        StartMovement(newPosition, newRotation, TickTime);
+        StartMovement(newPosition, newRotation);
     }
 
     public void Left()
@@ -39,7 +39,7 @@ public class Drop : MonoBehaviour
         var newPosition = new Vector3(transform.position.x - 1, transform.position.y, 0);
         var newRotation = Quaternion.Euler(new Vector3(0, 0, -30f));
         
-        StartMovement(newPosition, newRotation, TickTime);
+        StartMovement(newPosition, newRotation);
     }
 
     public void Right()
@@ -47,17 +47,17 @@ public class Drop : MonoBehaviour
         var newPosition = new Vector3(transform.position.x + 1, transform.position.y, 0);
         var newRotation = Quaternion.Euler(new Vector3(0, 0, 30f));
         
-        StartMovement(newPosition, newRotation, TickTime);
+        StartMovement(newPosition, newRotation);
     }
 
-    private void StartMovement(Vector3 newPosition, Quaternion newRotation, float tickTime)
+    private void StartMovement(Vector3 newPosition, Quaternion newRotation)
     {
         if (_moveOverTickCoroutine != null)
         {
             StopCoroutine(_moveOverTickCoroutine);
         }
 
-        _moveOverTickCoroutine = StartCoroutine(MoveOverTick(newPosition, newRotation, tickTime));
+        _moveOverTickCoroutine = StartCoroutine(MoveOverTick(newPosition, newRotation, TickTime));
     }
 
     private IEnumerator MoveOverTick(Vector3 newPosition, Quaternion newRotation, float tickTime)

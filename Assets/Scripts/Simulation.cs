@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections;
 using TMPro;
+using UnityEditor.Scripting.Python;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+[RequireComponent(typeof(RandomSequence))]
 public class Simulation : MonoBehaviour
 {
     [SerializeField] private Drop _drop;
@@ -12,12 +14,19 @@ public class Simulation : MonoBehaviour
     
     [Space]
     [SerializeField] private TMP_Text _jumpsCount;
+    
+    private RandomSequence _randomSequence;
 
     private int _height;
 
-    private readonly Probabilities _probabilities = new Probabilities();
+    private readonly Probabilities _probabilities = new();
     
     private Coroutine _simulateCoroutine;
+
+    private void Awake()
+    {
+        _randomSequence = GetComponent<RandomSequence>();
+    }
 
     public event Action<float, float, float, float> ValuesChange;
 
@@ -40,6 +49,7 @@ public class Simulation : MonoBehaviour
     public void StartSimulation()
     {
         Reset();
+        FillSequence();
         NormalizeValuesSum();
         CalculateProbabilities();
         _simulateCoroutine = StartCoroutine(Simulate());
@@ -87,12 +97,19 @@ public class Simulation : MonoBehaviour
         {
             StopCoroutine(_simulateCoroutine);
         }
+        
+        _randomSequence.Clear();
+    }
+
+    private void FillSequence()
+    {
+        PythonRunner.RunFile("Assets/PythonScripts/random_generation.py");
     }
 
     private IEnumerator Simulate()
     {
         _drop.TickTime = _tickTime - (_tickTime / 15);
-        while (_drop.IsFalling())
+        while (_drop.IsFalling() && _randomSequence.NotEmpty)
         {
             Tick();
             
@@ -102,7 +119,7 @@ public class Simulation : MonoBehaviour
 
     private void Tick()
     {
-        var randomValue = Random.value;
+        var randomValue = _randomSequence.Dequeue();
 
         if (randomValue <= _probabilities.Up)
         {
